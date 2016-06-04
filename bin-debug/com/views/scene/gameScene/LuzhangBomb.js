@@ -12,27 +12,26 @@ var com;
                         __extends(luzhangBomb, _super);
                         function luzhangBomb() {
                             _super.call(this);
-                            this.initLuzhangBomb();
+                            this.texture = RES.getRes("luzhang");
+                            this.config = RES.getRes("luzhangjson");
                         }
                         var d = __define,c=luzhangBomb,p=c.prototype;
-                        p.initLuzhangBomb = function () {
-                            var texture = RES.getRes("luzhang");
-                            var config = RES.getRes("luzhangjson");
-                            this.system = new particle.GravityParticleSystem(texture, config);
+                        p.init = function () {
+                            this.system = new particle.GravityParticleSystem(this.texture, this.config);
                             this.system.start(400);
                             this.addChild(this.system);
                         };
                         p.onRemoveStage = function (e) {
                             _super.prototype.onRemoveStage.call(this, e);
                             this.system.stop(true);
+                            this.removeChild(this.system);
                             this.system = null;
                         };
-                        p.setPos = function (x, y) {
-                            this.x = x;
-                            this.y = y;
+                        p.getType = function () {
+                            return com.constants.ItemConstant.BOMB;
                         };
                         return luzhangBomb;
-                    }(com.views.ui.BasicView));
+                    }(gameScene.AbstractItem));
                     gameScene.luzhangBomb = luzhangBomb;
                     egret.registerClass(luzhangBomb,'com.views.ui.scene.gameScene.luzhangBomb');
                 })(gameScene = scene.gameScene || (scene.gameScene = {}));

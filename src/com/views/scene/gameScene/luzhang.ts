@@ -1,38 +1,10 @@
 module com.views.ui.scene.gameScene {
-    export class luzhang extends com.views.ui.BasicView {
-
-        private armature: dragonBones.Armature;
-        private item;
-        bg:egret.Bitmap;
-
-        posType:number = 0;//位置参数
-        lOrR:number = 0;//0为luzhang  1 为 round
-
-        isEnd:boolean = false;
-        isHit:boolean = false;
-        gap: number = 10; 
-        public id = "luzhang";
-        
-        public broken = false;
-
-
+    export class luzhang extends AbstractItem{
         constructor() {
             super();
-            this.initLuZhang();
         }
 
-        initLuZhang():void{
-
-            var dragonbonesData = RES.getRes("items/json");
-            var textureData = RES.getRes("items/texture");
-            var texture = RES.getRes("items/png");
-
-            var dragonbonesFactory: dragonBones.EgretFactory = new dragonBones.EgretFactory();
-            dragonbonesFactory.addDragonBonesData(dragonBones.DataParser.parseDragonBonesData(dragonbonesData));
-            dragonbonesFactory.addTextureAtlas(new dragonBones.EgretTextureAtlas(texture,textureData));
-            this.armature = dragonbonesFactory.buildArmature("Armature");
-
-
+        init():void{
             this.item = this.armature.display;
             this.addChild(this.item);
 
@@ -68,27 +40,8 @@ module com.views.ui.scene.gameScene {
 //            egret.Ticker.getInstance().unregister(this.dragonbones,this);
         }
 
-        setPos(x:number,y:number):void{
-            this.x = x;
-            this.y = y;
-
+        getType(): number {
+            return com.constants.ItemConstant.BLOCK;
         }
-
-
-        tweenGoToBottom():void{
-            egret.Tween.get(this).to({y:com.model.DataCenter.instance.configVO.appHeight+50},1500).call(function(){
-                //this.parent.removeChild(this);
-                this.isEnd = true;
-            }.bind(this));
-        }
-
-        update():void{
-            if(this.isEnd)return;
-            this.y+=this.gap;
-            if(this.y>=com.model.DataCenter.instance.configVO.appHeight+50){
-                this.isEnd = true;
-            }
-        }
-
     }
 }

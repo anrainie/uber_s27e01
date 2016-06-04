@@ -1,42 +1,34 @@
 module com.views.ui.scene.gameScene {
-    export class luzhangBomb extends com.views.ui.BasicView {
-
-
+    export class luzhangBomb extends AbstractItem {
         system:particle.GravityParticleSystem;
 
+         texture:egret.Texture;
+         config ;
+       
         constructor() {
             super();
-            this.initLuzhangBomb();
+            this.texture = RES.getRes("luzhang");
+            this.config = RES.getRes("luzhangjson");
         }
 
-        initLuzhangBomb():void{
-
-            var texture = RES.getRes("luzhang");
-            var config = RES.getRes("luzhangjson");
-            this.system = new particle.GravityParticleSystem(texture, config);
-
+        init(): void {
+            this.system = new particle.GravityParticleSystem(this.texture,this.config);
             this.system.start(400);
-
             this.addChild(this.system);
-
-
-
-
+            
         }
+        
         protected onRemoveStage(e: egret.Event) {//移除
             super.onRemoveStage(e);
             this.system.stop(true);
+            this.removeChild(this.system);
             this.system = null;
-
-
         }
+        
 
-        setPos(x:number,y:number):void{
-            this.x = x;
-            this.y = y;
-
+        getType(): number {
+            return com.constants.ItemConstant.BOMB;
         }
-
     }
 }
 

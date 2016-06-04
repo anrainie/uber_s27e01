@@ -222,7 +222,9 @@ module com.views.scene {
 
             }
         }
-        
+        /**
+         * 检查运动状态
+         */ 
         check(items,car: com.views.ui.scene.gameScene.car,rx:number,lx:number) {
             for(var i = 0;i < items.length ;i++) {
                 if(items[i] == null) continue;
@@ -231,39 +233,45 @@ module com.views.scene {
                     this.removeChild(items[i]);
                     items.splice(i,1);
                     continue;}
-                if(items[i].isHit) {
+                if(items[i].isHit || items[i].isEnd) {
                     this.removeChild(items[i]);
                     items.splice(i,1);
-                    continue;}
+                    continue;
+                }
                 var clx = car.x;
                 var cly = car.y;
                 var lax = items[i].x;
                 var lay = items[i].y;
                 if(com.utils.AppUtils.posDistance({ x: clx,y: cly },{ x: lax,y: lay }) < 10) {
-                    if(items[i].id == "luzhang") {
-                        this.luZhangBomb = new com.views.ui.scene.gameScene.luzhangBomb();
-                        this.luZhangBomb.x = car.isLeftRight?lx:rx;
-                        this.luZhangBomb.y = 450;
-                        this.addChild(this.luZhangBomb);
-                        if(car.hasShield) {
-                            car.setShield(false);
-                        }else{
-                            console.log("gameOver");
-                            car.broken();
-                            this.gameOverCallFunc();
+                    switch(items[i].getType()){
+                        case com.constants.ItemConstant.BLOCK:{
+                            this.luZhangBomb = ClassPool.getInstance().getBomb();
+                            this.luZhangBomb .reset();
+                            this.luZhangBomb.x = car.isLeftRight?lx:rx;
+                            this.luZhangBomb.y = 450;
+                            this.addChild(this.luZhangBomb);
+                            if(car.hasShield) {
+                                car.setShield(false);
+                            }else{
+                                console.log("gameOver");
+                                car.broken();
+                                this.gameOverCallFunc();
+                            }
+                            break;
+                        } 
+                        case com.constants.ItemConstant.SCORE:{
+                            this.score+=50;
+                            this.scoreLabel.text = this.score + "";
+                            break;
+                        } case com.constants.ItemConstant.SHILED: {
+                            this.score += 50;
+                            car.setShield(true);
+                            this.scoreLabel.text = this.score + "";
                         }
-                    } else if(items[i].id == "round"){
-                        this.score+=50;
-                        this.scoreLabel.text = this.score + ""
-                    } else if(items[i].id == "shield") {
-                        this.score += 50;
-                        car.setShield(true);
-                        this.scoreLabel.text = this.score + "";
                     }
                     this.removeChild(items[i]);
                     items.splice(i,1);
                 }
-
             }
         } 
         
@@ -280,26 +288,30 @@ module com.views.scene {
             }
         }
 
+        
+        
         luzhangFactory(num:number):com.views.ui.scene.gameScene.luzhang{
-
-            var luzhang = new com.views.ui.scene.gameScene.luzhang();
+//            var luzhang = new com.views.ui.scene.gameScene.luzhang();
+            var luzhang = ClassPool.getInstance().getBlock();
+            luzhang.reset();
             luzhang.setPos((1+num*2)/8*com.model.DataCenter.instance.configVO.appWidth,0);
-            luzhang.posType = num;
             luzhang.gap = this.lOrRMovrGap;
             return luzhang;
 
         }
         roundFactory(num:number):com.views.ui.scene.gameScene.round{
-            var round = new com.views.ui.scene.gameScene.round();
+//            var round = new com.views.ui.scene.gameScene.round();
+            var round = ClassPool.getInstance().getScore();
+            round.reset();
             round.setPos((1+num*2)/8*com.model.DataCenter.instance.configVO.appWidth,0);
-            round.posType = num;
             round.gap = this.lOrRMovrGap;
             return round;
         }
         shieldFactory(num: number): com.views.ui.scene.gameScene.shield {
-            var shield = new com.views.ui.scene.gameScene.shield();
+//            var shield = new com.views.ui.scene.gameScene.shield();
+            var shield = ClassPool.getInstance().getShield();
+            shield.reset();
             shield.setPos((1 + num * 2) / 8 * com.model.DataCenter.instance.configVO.appWidth,0);
-            shield.posType = num;
             shield.gap = this.lOrRMovrGap;
             return shield;
         }
