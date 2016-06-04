@@ -12,11 +12,13 @@ var com;
                         __extends(luzhangBomb, _super);
                         function luzhangBomb() {
                             _super.call(this);
-                            this.texture = RES.getRes("luzhang");
-                            this.config = RES.getRes("luzhangjson");
                         }
                         var d = __define,c=luzhangBomb,p=c.prototype;
                         p.init = function () {
+                            if (this.texture == null)
+                                this.texture = RES.getRes("luzhang");
+                            if (this.config == null)
+                                this.config = RES.getRes("luzhangjson");
                             this.system = new particle.GravityParticleSystem(this.texture, this.config);
                             this.system.start(400);
                             this.addChild(this.system);

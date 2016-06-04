@@ -245,8 +245,7 @@ module com.views.scene {
                 if(com.utils.AppUtils.posDistance({ x: clx,y: cly },{ x: lax,y: lay }) < 10) {
                     switch(items[i].getType()){
                         case com.constants.ItemConstant.BLOCK:{
-                            this.luZhangBomb = ClassPool.getInstance().getBomb();
-                            this.luZhangBomb .reset();
+                            this.luZhangBomb = new com.views.ui.scene.gameScene.luzhangBomb();
                             this.luZhangBomb.x = car.isLeftRight?lx:rx;
                             this.luZhangBomb.y = 450;
                             this.addChild(this.luZhangBomb);

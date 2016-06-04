@@ -7,11 +7,13 @@ module com.views.ui.scene.gameScene {
        
         constructor() {
             super();
-            this.texture = RES.getRes("luzhang");
-            this.config = RES.getRes("luzhangjson");
         }
 
         init(): void {
+            if(this.texture==null)
+                this.texture = RES.getRes("luzhang");
+            if(this.config == null)
+                this.config = RES.getRes("luzhangjson");
             this.system = new particle.GravityParticleSystem(this.texture,this.config);
             this.system.start(400);
             this.addChild(this.system);
